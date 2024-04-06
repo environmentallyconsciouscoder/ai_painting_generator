@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Painting Generator
 
-## Getting Started
+This project is a web application built using Next.js that utilises OpenAI's powerful language model to compose detailed descriptions of paintings based on your input. Whether you're an art enthusiast seeking insights into a specific painting or an artist looking for inspiration, this assistant is here to help.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Painting Description Suggestions**: Provide a short description of a painting, and the assistant will suggest and describe the details of the painting, including its elements, style, details, and colors.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Theme Selection**: Choose from a selection of painting themes to guide the assistant in generating a description tailored to your preferences.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Text-based Output**: After submitting your theme and description request, the assistant will generate the painting description and display it in a text box for you to review.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Image Generation Request**: If you'd like to visualize the painting based on the generated description, simply request the image generation by providing the necessary parameters in the short form provided.
 
-## Learn More
+- **Image Display**: Once the image is generated, it will be displayed on the page for you to admire and use as inspiration.
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To use the application:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Clone this repository.
+2. Install dependencies by running `npm install`.
+3. Start the development server with `npm run dev`.
+4. Visit `http://localhost:3000` in your web browser to access the application.
 
-## Deploy on Vercel
+## Parameters
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The following parameters can be customized:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Theme**: Choose from a list of options such as Nature, Portraits, Fantasy, Cityscapes, etc.
+
+## Contributors
+
+This project is maintained by the following contributors:
+
+- [Contributor 1](https://github.com/environmentallyconsciouscoder)
