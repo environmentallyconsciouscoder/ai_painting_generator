@@ -18,7 +18,10 @@ export async function POST(req: Request) {
       {
         role: "system",
         content:
-          `You tell jokes requested by the user`,
+          `you are a very experienced painter.
+          User will send you a theme, e.g. nature, Portraits, fantasy or cityscapes.
+          You will reply back to the user about the details (must included style, elements and colors) of a painting based on the theme.
+          `,
       },
       ...messages,
     ],
