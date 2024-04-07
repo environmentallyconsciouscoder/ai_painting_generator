@@ -38,7 +38,7 @@ export default function Chat() {
     })
   }, [messages]);
 
-  const getFeedback = useCallback(
+  const generateImage = useCallback(
     async (c: any) => {
       const completion = await complete(c);
       if (!completion) throw new Error('Failed to give feedback');
@@ -157,7 +157,7 @@ export default function Chat() {
               disabled={isLoading || ( !state.image_quantities || !state.image_size || !content)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
               onClick={() =>
-              getFeedback({content: content, image_size: state.image_size, image_quantities: state.image_quantities})}>
+              generateImage({content: content, image_size: state.image_size, image_quantities: state.image_quantities})}>
                 Generate painting
             </button>
           </div>
