@@ -6,44 +6,31 @@ import { useCompletion, useChat } from 'ai/react';
 export default function Chat() {
   const { messages, append, isLoading } = useChat();
   const [content, setContent] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [painting, setPainting] = useState("https://generative-placeholders.glitch.me/image?width=600&height=300&style=triangles&gap=30");
 
   const { complete } = useCompletion({
     api: '/api/completion',
   });
 
-  const tones = [
-    { value: "witty" },
-    { value: "silly" },
-    { value: "Sarcastic" },
-    { value: "dark" },
-    { value: "goofy" },
+  const themes = [
+    { value: "Nature" },
+    { value: "Portraits" },
+    { value: "Fantasy" },
+    { value: "Cityscapes" },
   ];
 
-  const topics = [
-    { value: "work" },
-    { value: "people" },
-    { value: "animals" },
-    { value: "food" },
-    { value: "television" },
-  ];
-
-  const kindOfJokes = [
-    { value: "pun" },
-    { value: "knock-knock" },
-    { value: "story" },
+  const image_sizes = [
+    { value: "512x512" },
+    { value: "256x256" },
   ];
 
   const [state, setState] = useState({
-    topic: "",
-    tone: "",
-    kindOfJoke: ""
+    themes: "",
+    image_size: "",
+    image_quantities: 1,
   });
 
-  const [temperature, setTemperature] = useState(1);
-
   useEffect(() => {
-    // console.log("messages", messages)
     messages.map((message) => {
       if (message?.role === "assistant") {
         setContent(message.content)
@@ -52,11 +39,11 @@ export default function Chat() {
   }, [messages]);
 
   const getFeedback = useCallback(
-    async (c: string) => {
+    async (c: any) => {
       const completion = await complete(c);
       if (!completion) throw new Error('Failed to give feedback');
-      // alert(completion);
-      setFeedback(completion)
+      console.log("completion", completion)
+      setPainting(completion)
     },
     [complete],
   );
@@ -75,16 +62,13 @@ export default function Chat() {
       <div className="p4 m-4">
         <div className="flex flex-col items-center justify-center space-y-8 text-white">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold">Joke Generator App</h2>
-            <p className="text-zinc-500 dark:text-zinc-400">
-              Customize the joke by selecting topic, tone, kind of joke and Temperature.
-            </p>
+            <h2 className="text-3xl font-bold">AI Painting Generator App</h2>
           </div>
 
           <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Topics</h3>
+            <h3 className="text-xl font-semibold">themes</h3>
             <div className="flex flex-wrap justify-center">
-              {topics.map(({ value }) => (
+              {themes.map(({ value }) => (
                 <div
                   key={value}
                   className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg"
@@ -92,7 +76,7 @@ export default function Chat() {
                   <input
                     id={value}
                     type="radio"
-                    name="topic"
+                    name="themes"
                     value={value}
                     onChange={handleChange}
                   />
@@ -104,33 +88,24 @@ export default function Chat() {
             </div>
           </div>
 
-          <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Tones</h3>
-            <div className="flex flex-wrap justify-center">
-              {tones.map(({ value }) => (
-                <div
-                  key={value}
-                  className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg"
-                >
-                  <input
-                    id={value}
-                    type="radio"
-                    name="tone"
-                    value={value}
-                    onChange={handleChange}
-                  />
-                  <label className="ml-2" htmlFor={value}>
-                    {` ${value}`}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+            disabled={isLoading || ( !state.themes)}
+            onClick={() =>
+              append({
+                role: "user",
+                content: ` ${state.themes}`
+              }
+              )
+            }
+          >
+            Generate painting description
+          </button>
 
           <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Kind of Joke</h3>
+            <h3 className="text-xl font-semibold">image sizes</h3>
             <div className="flex flex-wrap justify-center">
-              {kindOfJokes.map(({ value }) => (
+              {image_sizes.map(({ value }) => (
                 <div
                   key={value}
                   className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg"
@@ -138,7 +113,7 @@ export default function Chat() {
                   <input
                     id={value}
                     type="radio"
-                    name="kindOfJoke"
+                    name="image_size"
                     value={value}
                     onChange={handleChange}
                   />
@@ -151,45 +126,21 @@ export default function Chat() {
           </div>
 
         <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-          <h3 className="text-xl font-semibold">Temperature</h3>
-          <label className="hidden" htmlFor="temperature">
-            Temperature
-          </label>
+          <h3 className="text-xl font-semibold">Number of paintings</h3>
           <div className="flex items-center">
-            <span>🧊</span>
+            <span>1</span>
             <input
               className="w-full mt-2 bg-red-500"
-              max="1"
-              min="0"
-              step="0.1"
+              max="4"
+              min="1"
+              step="1"
               type="range"
-              onChange={(e) => setTemperature(parseFloat(e.target.value))}
-            />
-            <span>🔥</span>
+              name="image_quantities"
+              onChange={handleChange}
+              />
+            <span>4</span>
           </div>
         </div>
-
-
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-            disabled={isLoading || ( !state.tone || !state.topic || !state.kindOfJoke || !temperature)}
-            onClick={() =>
-              append({
-                role: "user",
-                content: `give me a ${state.kindOfJoke} joke about ${state.topic} in a ${state.tone} tone`
-              },
-              {
-                options: {
-                  body: {
-                    temperature: temperature
-                  }
-                }
-              }
-              )
-            }
-          >
-            Generate Story
-          </button>
 
           <div
             hidden={
@@ -203,18 +154,17 @@ export default function Chat() {
 
           <div>
             <button
-              disabled={isLoading || ( !state.tone || !state.topic || !state.kindOfJoke || !temperature || !content)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50" onClick={() => getFeedback(content)}>Get Feedback on joke</button>
+              disabled={isLoading || ( !state.image_quantities || !state.image_size || !content)}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+              onClick={() =>
+              getFeedback({content: content, image_size: state.image_size, image_quantities: state.image_quantities})}>
+                Generate painting
+            </button>
           </div>
-
-          <div
-            className={feedback? "bg-opacity-25 bg-gray-700 rounded-lg p-4": ""}
-          >
-            {feedback}
-          </div>
-
+          <img src={painting} alt="painting generated from open ai"></img>
         </div>
       </div>
     </main>
   );
 }
+
